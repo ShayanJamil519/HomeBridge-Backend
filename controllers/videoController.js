@@ -1,5 +1,5 @@
 const CelebrityModel = require("../models/celebrityModel");
-const VideoModel = require("../models/videoModel");
+const VideoModel = require("../models/jobHouseModel");
 
 // Admin
 module.exports.addNewCelebrityVideo = async (req, res, next) => {
@@ -67,7 +67,6 @@ module.exports.editCelebrityVideo = async (req, res, next) => {
   }
 };
 
-
 // Admin API
 module.exports.getAllVideosByCelebrityId = async (req, res, next) => {
   try {
@@ -80,7 +79,6 @@ module.exports.getAllVideosByCelebrityId = async (req, res, next) => {
     return res.status(500).json({ status: false, message: ex.message });
   }
 };
-
 
 // Get all public videos of a specific celebrity
 module.exports.getPublicVideosByCelebrityId = async (req, res, next) => {
@@ -97,8 +95,6 @@ module.exports.getPublicVideosByCelebrityId = async (req, res, next) => {
     return res.status(500).json({ status: false, message: ex.message });
   }
 };
-
-
 
 module.exports.getVideoById = async (req, res, next) => {
   try {

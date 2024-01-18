@@ -1,71 +1,24 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
-  username: {
+  fullName: {
     type: String,
-    required: [true, "Please Enter Your User Name"],
+    required: [true, "Full name is required"],
+    trim: true,
+    minlength: [3, "Full name must be at least 3 characters long"],
+    maxlength: [100, "Full name is too long"],
   },
-
   email: {
     type: String,
-    required: [true, "Please Enter Your Email"],
+    required: [true, "Email address is required"],
     unique: true,
+    lowercase: true,
+    trim: true,
   },
-
   password: {
     type: String,
+    required: [true, "Password is required"],
+    minlength: [6, "Password must be at least 6 characters long"],
   },
-
-  role: {
-    type: String,
-    default: "user",
-  },
-
-  authId: {
-    type: String,
-  },
-
-  inviteCode: {
-    type: String,
-  },
-
-  gender: {
-    type: String,
-  },
-  dob: {
-    type: String,
-  },
-  phoneNumber: {
-    type: String,
-  },
-  tcashEarned: { type: Number, default: 0 },
-
-  image: {
-    public_id: {
-      type: String,
-    },
-    url: {
-      type: String,
-    },
-  },
-
-  coupons: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "coupon",
-    },
-  ],
-  favorites: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "celebrities",
-    },
-  ],
-  bookings: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "orders",
-    },
-  ],
 });
 
-module.exports = mongoose.model("users", userSchema);
+module.exports = mongoose.model("User", userSchema);
