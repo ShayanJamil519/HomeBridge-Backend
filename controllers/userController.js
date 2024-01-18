@@ -67,6 +67,46 @@ module.exports.login = async (req, res, next) => {
   }
 };
 
+module.exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find();
+
+    if (users.length === 0) {
+      return res.json({
+        status: false,
+        message: "No Record Found",
+      });
+    }
+
+    return res.json({
+      status: true,
+      users,
+    });
+  } catch (ex) {
+    return res.json({ status: false, message: ex.message });
+  }
+};
+
+module.exports.getSingleUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+
+    if (!user) {
+      return res.json({
+        status: false,
+        message: "No record found!",
+      });
+    }
+
+    return res.json({
+      status: true,
+      user: user,
+    });
+  } catch (ex) {
+    return res.json({ status: false, message: ex.message });
+  }
+};
+
 // // module.exports.updateUser = async (req, res, next) => {
 // //   const { userId } = req.query;
 // //   let { userData } = req.body;
