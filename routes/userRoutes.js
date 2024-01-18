@@ -1,6 +1,6 @@
 const {
-  // register,
-  // login,
+  register,
+  login,
   // updateUser,
   // addFavorite,
   // getFavoriteCelebrities,
@@ -12,8 +12,8 @@ const apiUrl = require("../utils/baseUrl");
 const router = require("express").Router();
 
 // router.post("/auth/google", googleAuth);
-// router.post("/api/user/register", register);
-// router.post("/api/user/login", login);
+router.post("/api/user/createUser", register);
+router.post("/api/user/login", login);
 // router.post("/api/user/googleAuth", googleAuth);
 
 // router.get("/api/user/details/:id", getUserById);
