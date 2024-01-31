@@ -3,28 +3,17 @@ const {
   login,
   getAllUsers,
   getSingleUser,
-  // updateUser,
-  // addFavorite,
-  // getFavoriteCelebrities,
-  // getUserById,
-  // googleAuth,
+  adminLogin,
 } = require("../controllers/userController");
 const { isAuthenticatedUser } = require("../utils/authMiddlewares");
 const apiUrl = require("../utils/baseUrl");
 
 const router = require("express").Router();
 
-// router.post("/auth/google", googleAuth);
 router.post("/api/user/createUser", register);
 router.post("/api/user/login", login);
+router.post("/api/user/adminLogin", adminLogin);
 router.get("/api/user/allUsers", getAllUsers);
 router.get("/api/user/:id", isAuthenticatedUser, getSingleUser);
-
-// router.post("/api/user/googleAuth", googleAuth);
-
-// router.get("/api/user/details/:id", getUserById);
-// router.put("/api/user/update", updateUser);
-// router.put("/api/user/addFavorite/:id", addFavorite);
-// router.get("/api/user/favoriteCelebrities/:userId", getFavoriteCelebrities);
 
 module.exports = router;
