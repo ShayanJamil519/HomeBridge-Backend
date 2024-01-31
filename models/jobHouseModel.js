@@ -12,7 +12,7 @@ const JobHouseSchema = new mongoose.Schema({
   explanation: String,
   externalFeatures: String,
   contractInformation: String,
-  registerationDate: Date.now(),
+  registerationDate: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("JobHouse", JobHouseSchema);

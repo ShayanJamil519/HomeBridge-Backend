@@ -23,6 +23,23 @@ module.exports.getAllJobAndHouseAnnouncement = async (req, res, next) => {
   }
 };
 
+module.exports.getSingleJobAndHouseAnnouncement = async (req, res, next) => {
+  try {
+    const { id } = req.query;
+
+    if (!id) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Record not found" });
+    }
+    const announcement = await JobHouse.findById(id);
+
+    return res.json({ status: true, data: announcement });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
+  }
+};
+
 // module.exports.orderDetails = async (req, res, next) => {
 //   try {
 //     const { orderId } = req.query;
