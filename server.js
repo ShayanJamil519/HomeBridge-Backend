@@ -22,25 +22,13 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 const userRoute = require("./routes/userRoutes");
 const eventApplicationRoute = require("./routes/eventApplicationRoutes");
 const jobHouseRoute = require("./routes/jobHouseRoutes");
+const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
 
-// const businessPromotionRoute = require("./routes/businessPromotionRoutes");
-// const videoRoute = require("./routes/videoRoutes");
-// const orderRoute = require("./routes/orderRoutes");
-// const couponRoute = require("./routes/couponRoutes");
-// const celebrityRoute = require("./routes/celebrityRoutes");
-// const faqRoute = require("./routes/faqsRoutes");
-
-// // Routes
+// Routes
 app.use("/", userRoute);
 app.use("/", eventApplicationRoute);
 app.use("/", jobHouseRoute);
-
-// app.use("/", videoRoute);
-// app.use("/", orderRoute);
-// app.use("/", couponRoute);
-// app.use("/", celebrityRoute);
-// app.use("/", businessPromotionRoute);
-// app.use("/", faqRoute);
+app.use("/", jobApplicationRoutes);
 
 //database connection
 mongoose

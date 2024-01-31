@@ -7,7 +7,10 @@ const jobApplicationModel = new mongoose.Schema({
   nationality: String,
   phoneNumber: String,
   email: String,
-  applicationDate: Date,
+  applicationDate: {
+    type: Date,
+    default: Date.now,
+  },
   message: String,
 
   user: {

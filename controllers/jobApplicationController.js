@@ -1,73 +1,51 @@
-const FAQsModel = require("../models/faqsModel");
+const JobApplication = require("../models/jobHouseApplicationModel");
 
-module.exports.addFAQ = async (req, res) => {
+module.exports.createApplication = async (req, res, next) => {
   try {
-    const { question, answer } = req.body;
-
-    const newFAQ = new FAQsModel({
-      question,
-      answer,
-    });
-
-    await newFAQ.save();
+    const application = await JobApplication.create(req.body);
 
     return res.json({
       status: true,
-      message: "FAQ added successfully",
-      data: newFAQ,
+      message: "Application created successfully!",
     });
-  } catch (error) {
-    return res.status(500).json({ status: false, message: error.message });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
   }
 };
 
-module.exports.getAllFAQs = async (req, res) => {
+module.exports.getAllApplications = async (req, res, next) => {
   try {
-    const faqs = await FAQsModel.find();
-    return res.json({ status: true, data: faqs });
-  } catch (error) {
-    return res.status(500).json({ status: false, message: error.message });
+    const applications = await JobApplication.find();
+    if (applications.length === 0) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
+    }
+    return res.json({ status: true, data: applications });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
   }
 };
 
-module.exports.getFAQById = async (req, res) => {
+module.exports.getSingleApplication = async (req, res, next) => {
   try {
-    const faqID = req.params.id;
+    const { id } = req.query;
 
-    const faq = await FAQsModel.findById(faqID);
-
-    if (!faq) {
-      return res.status(404).json({ status: false, message: "FAQ not found" });
+    if (!id) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Insufficient Details" });
     }
 
-    return res.json({ status: true, data: faq });
-  } catch (error) {
-    return res.status(500).json({ status: false, message: error.message });
-  }
-};
-
-module.exports.editFAQById = async (req, res) => {
-  try {
-    const faqID = req.params.id;
-    const { question, answer } = req.body;
-
-    const faq = await FAQsModel.findById(faqID);
-
-    if (!faq) {
-      return res.status(404).json({ status: false, message: "FAQ not found" });
+    const application = await JobApplication.findById(id);
+    if (!application) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
     }
 
-    faq.question = question;
-    faq.answer = answer;
-
-    const updatedFAQ = await faq.save();
-
-    return res.json({
-      status: true,
-      message: "FAQ updated successfully",
-      data: updatedFAQ,
-    });
-  } catch (error) {
-    return res.status(500).json({ status: false, message: error.message });
+    return res.json({ status: true, data: application });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
   }
 };

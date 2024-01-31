@@ -25,9 +25,5 @@ router.get(
   isAuthenticatedUser,
   getSingleJobAndHouseAnnouncement
 );
-// router.get("/api/order/orderDetails", orderDetails);
-// router.put("/api/order/orderApproval", approveOrDiscard);
-// router.put("/api/order/orderStatus", updateOrderStatus);
-// router.post("/api/order/deliverOrder", deliverOrder);
 
 module.exports = router;
