@@ -47,7 +47,7 @@ module.exports.login = async (req, res, next) => {
       });
     }
 
-    let isPasswordValid = bcrypt.compare(password, user.password);
+    let isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       return res.json({
@@ -59,8 +59,10 @@ module.exports.login = async (req, res, next) => {
     return res.json({
       status: true,
       message: "Login Successfull",
-      userId: user._id,
-      token: `Bearer ${generateToken(user._id.toString())}`,
+      user: {
+        userId: user._id,
+        token: `Bearer ${generateToken(user._id.toString())}`,
+      },
     });
   } catch (ex) {
     return res.json({ status: false, message: ex.message });
@@ -80,7 +82,7 @@ module.exports.adminLogin = async (req, res, next) => {
       });
     }
 
-    let isPasswordValid = bcrypt.compare(password, user.password);
+    let isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       return res.json({
@@ -89,7 +91,7 @@ module.exports.adminLogin = async (req, res, next) => {
       });
     }
 
-    if (role !== "admin") {
+    if (user.role !== "admin") {
       return res.json({
         message: "You are not admin!",
         status: false,
