@@ -4,15 +4,15 @@ const JobHouseSchema = new mongoose.Schema({
   announcementName: String,
   companyName: String,
   jobInfo: String,
-  salaryAndBenefits: String,
+  salaryBenefit: String,
   jobDetails: String,
-  accommodationStatus: Boolean,
-  accommodationInfo: String,
-  accommodationImage: String,
-  generalInfo: String,
+  isAccomodated: Boolean,
+  jobHouseimages: [{ type: String }],
+  generationInformation: String,
   explanation: String,
   externalFeatures: String,
-  contractInfo: String,
+  contractInformation: String,
+  registerationDate: Date,
 });
 
 module.exports = mongoose.model("JobHouse", JobHouseSchema);
