@@ -1,7 +1,5 @@
 const FAQsModel = require("../models/faqsModel");
 
-
-
 module.exports.addFAQ = async (req, res) => {
   try {
     const { question, answer } = req.body;
@@ -13,12 +11,15 @@ module.exports.addFAQ = async (req, res) => {
 
     await newFAQ.save();
 
-    return res.json({ status: true, message: 'FAQ added successfully', data: newFAQ });
+    return res.json({
+      status: true,
+      message: "FAQ added successfully",
+      data: newFAQ,
+    });
   } catch (error) {
     return res.status(500).json({ status: false, message: error.message });
   }
 };
-
 
 module.exports.getAllFAQs = async (req, res) => {
   try {
@@ -29,8 +30,6 @@ module.exports.getAllFAQs = async (req, res) => {
   }
 };
 
-
-
 module.exports.getFAQById = async (req, res) => {
   try {
     const faqID = req.params.id;
@@ -38,7 +37,7 @@ module.exports.getFAQById = async (req, res) => {
     const faq = await FAQsModel.findById(faqID);
 
     if (!faq) {
-      return res.status(404).json({ status: false, message: 'FAQ not found' });
+      return res.status(404).json({ status: false, message: "FAQ not found" });
     }
 
     return res.json({ status: true, data: faq });
@@ -55,7 +54,7 @@ module.exports.editFAQById = async (req, res) => {
     const faq = await FAQsModel.findById(faqID);
 
     if (!faq) {
-      return res.status(404).json({ status: false, message: 'FAQ not found' });
+      return res.status(404).json({ status: false, message: "FAQ not found" });
     }
 
     faq.question = question;
@@ -63,7 +62,11 @@ module.exports.editFAQById = async (req, res) => {
 
     const updatedFAQ = await faq.save();
 
-    return res.json({ status: true, message: 'FAQ updated successfully', data: updatedFAQ });
+    return res.json({
+      status: true,
+      message: "FAQ updated successfully",
+      data: updatedFAQ,
+    });
   } catch (error) {
     return res.status(500).json({ status: false, message: error.message });
   }
