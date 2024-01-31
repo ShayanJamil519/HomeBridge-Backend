@@ -30,9 +30,15 @@ module.exports.getSingleJobAndHouseAnnouncement = async (req, res, next) => {
     if (!id) {
       return res
         .status(404)
-        .json({ status: false, message: "Record not found" });
+        .json({ status: false, message: "Insufficient Details" });
     }
+
     const announcement = await JobHouse.findById(id);
+    if (!announcement) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
+    }
 
     return res.json({ status: true, data: announcement });
   } catch (ex) {

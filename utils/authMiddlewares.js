@@ -3,26 +3,20 @@ const UserModel = require("../models/userModel");
 
 exports.isAuthenticatedUser = async (req, res, next) => {
   try {
-    const headerToken = req.headers.authorization?.split(" ")[1];
+    const authHeader = req.headers.authorization;
 
-    if (headerToken) {
-      try {
-        const verify = jwt.verify(headerToken, process.env.JWT_SECRET);
+    const token = authHeader && authHeader.split(" ")[1];
 
-        if (verify) {
-          req.user = await UserModel.findById(verify);
-          console.log("req.user");
-          console.log(req.user);
+    if (token == null) {
+      return res.status(403).send("Unauthorized, No token Provided");
+    }
 
-          next();
-        } else {
-          res
-            .status(403)
-            .send({ status: "false", message: "Please login first" });
-        }
-      } catch (e) {
-        res.status(403).send({ status: "false", message: "Invalid token id" });
-      }
+    const verify = jwt.verify(token, `${process.env.JWT_SECRET}`);
+    if (verify) {
+      req.user = await UserModel.findById(verify);
+      return next();
+    } else {
+      return res.status(403).send("Unauthorized Access");
     }
   } catch (error) {
     console.error("err", error);
