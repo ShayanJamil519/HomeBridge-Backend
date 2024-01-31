@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 // // Routes Imports
 const userRoute = require("./routes/userRoutes");
+const eventApplicationRoute = require("./routes/eventApplicationRoutes");
 // const businessPromotionRoute = require("./routes/businessPromotionRoutes");
 // const videoRoute = require("./routes/videoRoutes");
 // const orderRoute = require("./routes/orderRoutes");
@@ -29,6 +30,7 @@ const userRoute = require("./routes/userRoutes");
 
 // // Routes
 app.use("/", userRoute);
+app.use("/", eventApplicationRoute);
 // app.use("/", videoRoute);
 // app.use("/", orderRoute);
 // app.use("/", couponRoute);

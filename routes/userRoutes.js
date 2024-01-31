@@ -9,6 +9,7 @@ const {
   // getUserById,
   // googleAuth,
 } = require("../controllers/userController");
+const { isAuthenticatedUser } = require("../utils/authMiddlewares");
 const apiUrl = require("../utils/baseUrl");
 
 const router = require("express").Router();
@@ -17,7 +18,7 @@ const router = require("express").Router();
 router.post("/api/user/createUser", register);
 router.post("/api/user/login", login);
 router.get("/api/user/allUsers", getAllUsers);
-router.get("/api/user/:id", getSingleUser);
+router.get("/api/user/:id", isAuthenticatedUser, getSingleUser);
 
 // router.post("/api/user/googleAuth", googleAuth);
 

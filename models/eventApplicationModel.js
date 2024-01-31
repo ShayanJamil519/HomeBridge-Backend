@@ -11,11 +11,9 @@ const eventApplicationSchema = new mongoose.Schema({
   },
   membershipNumber: String,
   eventName: String,
-  name: String,
   phoneNumber: String,
   email: String,
   applicationDate: Date,
-  eventProductNumber: String,
   message: String,
 });
 

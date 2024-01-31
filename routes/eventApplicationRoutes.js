@@ -1,12 +1,6 @@
-const {
-  postBusinessPromotionRequest,
-  getAllRequest,
-  getSinglePromotionRequest,
-} = require("../controllers/businessPromotionController");
+const {} = require("../controllers/eventApplicationController");
 const router = require("express").Router();
 
-router.post("/api/businessPromotion/submitForm", postBusinessPromotionRequest);
-router.get("/api/businessPromotion/allForms", getAllRequest);
-router.get("/api/businessPromotion/singleForm", getSinglePromotionRequest);
+router.post("/api/event_application/create/:eventId");
 
 module.exports = router;
