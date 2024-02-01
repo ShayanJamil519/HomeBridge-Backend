@@ -103,7 +103,7 @@ module.exports.deleteEventRegistration = async (req, res, next) => {
 
 module.exports.getAllEvents = async (req, res, next) => {
   try {
-    const allEvents = await Event.find();
+    const allEvents = await EventModel.find();
 
     if (allEvents.length === 0) {
       return res.status(200).json({
@@ -125,7 +125,7 @@ module.exports.getSingleEvent = async (req, res, next) => {
   try {
     const { eventId } = req.params;
 
-    const foundEvent = await Event.findById(eventId);
+    const foundEvent = await EventModel.findById(eventId);
 
     if (!foundEvent) {
       return res.status(404).json({
