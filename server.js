@@ -20,12 +20,14 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 // // Routes Imports
 const userRoute = require("./routes/userRoutes");
+const eventRoute = require("./routes/eventRoutes");
 const eventApplicationRoute = require("./routes/eventApplicationRoutes");
 const jobHouseRoute = require("./routes/jobHouseRoutes");
 const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
 
 // Routes
 app.use("/", userRoute);
+app.use("/", eventRoute);
 app.use("/", eventApplicationRoute);
 app.use("/", jobHouseRoute);
 app.use("/", jobApplicationRoutes);

@@ -1,199 +1,144 @@
-const CelebrityModel = require("../models/celebrityModel");
-const cloudinary = require("cloudinary");
+const EventModel = require("../models/eventModel");
 
 // Admin
-module.exports.addNewCelebrity = async (req, res, next) => {
+module.exports.eventRegistration = async (req, res, next) => {
   try {
     const {
-      name,
-      description,
-      celebrityImage,
-      ratings,
-      tags,
-      categories,
-      videoPrice,
-      meetAndGreetPrice,
-      fanDiscount,
-      responseInDays,
-      offers,
-      extras,
-      isFeatured,
+      price,
+      deadline,
+      noOfApplicants,
+      productIntroduction,
+      eventInformation,
+      productInformation,
+      days,
     } = req.body;
 
-    const newCelebrity = await CelebrityModel.create({
-      name,
-      description,
-      videoPrice,
-      meetAndGreetPrice,
-      isFeatured,
-      ratings: ratings || 0,
-      tags: tags || [],
-      categories: categories || [],
-      responseInDays,
-      fanDiscount,
-      offers: offers || [],
-      extras: extras || [],
-      celebrityImage,
+    const newEvent = await EventModel.create({
+      price,
+      deadline,
+      noOfApplicants,
+      registrationDate: new Date(),
+      productIntroduction,
+      eventInformation,
+      productInformation,
+      days,
     });
 
-    return res.json({
+    return res.status(201).json({
       status: true,
-      message: "Celebrity added successfully",
-      data: newCelebrity,
+      message: "Event registration successful",
+      event: newEvent,
     });
-  } catch (ex) {
-    console.log("error: ", ex);
-    return res.status(500).json({ status: false, message: ex.message });
-  }
-};
-
-module.exports.editCelebrity = async (req, res, next) => {
-  try {
-    const celebrityId = req.params.id;
-
-    const existingCelebrity = await CelebrityModel.findById(celebrityId);
-
-    if (!existingCelebrity) {
-      return res
-        .status(404)
-        .json({ status: false, message: "Celebrity not found" });
-    }
-
-    // Update the celebrity details
-    const {
-      name,
-      ratings,
-      tags,
-      categories,
-      videoPrice,
-      meetAndGreetPrice,
-      responseInDays,
-      offers,
-      extras,
-      isFeatured,
-      celebrityImage,
-      recentVideos,
-    } = req.body;
-
-    // Update the celebrity details in the database
-    existingCelebrity.name = name || existingCelebrity.name;
-    existingCelebrity.ratings = ratings || existingCelebrity.ratings;
-    existingCelebrity.tags = tags || existingCelebrity.tags;
-    existingCelebrity.categories = categories || existingCelebrity.categories;
-    existingCelebrity.videoPrice = videoPrice || existingCelebrity.videoPrice;
-    existingCelebrity.meetAndGreetPrice =
-      meetAndGreetPrice || existingCelebrity.meetAndGreetPrice;
-    existingCelebrity.responseInDays =
-      responseInDays || existingCelebrity.responseInDays;
-    existingCelebrity.offers = offers || existingCelebrity.offers;
-    existingCelebrity.extras = extras || existingCelebrity.extras;
-    existingCelebrity.isFeatured = isFeatured;
-
-    existingCelebrity.celebrityImage =
-      celebrityImage || existingCelebrity.celebrityImage;
-    existingCelebrity.recentVideos =
-      recentVideos || existingCelebrity.recentVideos;
-
-    await existingCelebrity.save();
-
-    return res.json({
-      status: true,
-      message: "Celebrity updated successfully",
-      data: existingCelebrity,
-    });
-  } catch (ex) {
-    return res.status(500).json({ status: false, message: ex.message });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
   }
 };
 
 // Admin
-module.exports.deleteCelebrity = async (req, res) => {
+module.exports.editEventRegistration = async (req, res, next) => {
   try {
-    const celebrityId = req.params.id;
+    const { eventId } = req.params;
 
-    const celebrity = await CelebrityModel.findByIdAndDelete(celebrityId);
-    if (!celebrity) {
-      return res
-        .status(404)
-        .json({ status: false, message: "Celebrity not found" });
+    const existingEvent = await EventModel.findById(eventId);
+    if (!existingEvent) {
+      return res.status(404).json({
+        status: false,
+        message: "Event not found",
+      });
     }
 
-    return res.json({
+    const {
+      price,
+      deadline,
+      noOfApplicants,
+      productIntroduction,
+      eventInformation,
+      productInformation,
+      days,
+    } = req.body;
+
+    existingEvent.price = price;
+    existingEvent.deadline = deadline;
+    existingEvent.noOfApplicants = noOfApplicants;
+    existingEvent.productIntroduction = productIntroduction;
+    existingEvent.eventInformation = eventInformation;
+    existingEvent.productInformation = productInformation;
+    existingEvent.days = days;
+
+    const updatedEvent = await existingEvent.save();
+
+    return res.status(200).json({
       status: true,
-      message: "Celebrity deleted successfully",
+      message: "Event registration updated successfully",
+      event: updatedEvent,
     });
   } catch (error) {
-    return res.status(500).json({ status: false, message: error.message });
+    res.status(500).json({ status: false, message: error.message });
   }
 };
 
-module.exports.getCelebrityDetails = async (req, res, next) => {
+// Admin
+module.exports.deleteEventRegistration = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { eventId } = req.params;
 
-    const celebrity = await CelebrityModel.findById(id);
-
-    if (!celebrity) {
-      return res
-        .status(404)
-        .json({ status: false, message: "Celebrity not found" });
+    const existingEvent = await EventModel.findById(eventId);
+    if (!existingEvent) {
+      return res.status(404).json({
+        status: false,
+        message: "Event not found",
+      });
     }
 
-    return res.json({ status: true, data: celebrity });
-  } catch (ex) {
-    return res.status(500).json({ status: false, message: ex.message });
-  }
-};
+    await existingEvent.remove();
 
-module.exports.getAllCelebrities = async (req, res, next) => {
-  try {
-    const celebrities = await CelebrityModel.find();
-    return res.json({ status: true, data: celebrities });
-  } catch (ex) {
-    return res.status(500).json({ status: false, message: ex.message });
-  }
-};
-
-module.exports.getCelebritiesWithSameCategories = async (req, res, next) => {
-  const { categories } = req.body;
-  // console.log("Hello: ", categories);
-  try {
-    const celebrities = await CelebrityModel.find({
-      categories: { $in: categories },
-    }).limit(8);
-
-    // console.log("celeb: ", celebrities);
-    res.json({ success: true, data: celebrities });
-  } catch (ex) {
-    res.status(500).json({ success: false, message: ex.message });
-  }
-};
-
-module.exports.getAllFeaturedCelebrities = async (req, res, next) => {
-  try {
-    const featuredCelebrities = await CelebrityModel.find({ isFeatured: true });
-    return res.json({ status: true, data: featuredCelebrities });
-  } catch (ex) {
-    return res.status(500).json({ status: false, message: ex.message });
-  }
-};
-
-module.exports.searchCelebrities = async (req, res) => {
-  try {
-    const { categories, celebrityName } = req.query;
-
-    const searchCriteria = {};
-    if (categories) {
-      searchCriteria.categories = { $in: categories.split(",") };
-    }
-    if (celebrityName) {
-      searchCriteria.name = { $regex: new RegExp(celebrityName, "i") };
-    }
-
-    const celebrities = await CelebrityModel.find(searchCriteria);
-
-    return res.json({ status: true, data: celebrities });
+    return res.status(200).json({
+      status: true,
+      message: "Event registration deleted successfully",
+    });
   } catch (error) {
-    return res.status(500).json({ status: false, message: error.message });
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+module.exports.getAllEvents = async (req, res, next) => {
+  try {
+    const allEvents = await Event.find();
+
+    if (allEvents.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No Record Found",
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      events: allEvents,
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+module.exports.getSingleEvent = async (req, res, next) => {
+  try {
+    const { eventId } = req.params;
+
+    const foundEvent = await Event.findById(eventId);
+
+    if (!foundEvent) {
+      return res.status(404).json({
+        status: false,
+        message: "Event not found",
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      event: foundEvent,
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
   }
 };

@@ -1,12 +1,15 @@
 const mongoose = require("mongoose");
 
 const eventSchema = new mongoose.Schema({
+  price: Number,
+  deadline: Date,
+  noOfApplicants: Number,
+  registrationDate: Date,
   productIntroduction: String,
-  eventInfo: String,
-  productInfo: String,
+  eventInformation: String,
+  productInformation: String,
   days: [
     {
-      dayNumber: Number,
       scheduleIntroduction: String,
       detailedSchedule: String,
       scheduleImage: String,

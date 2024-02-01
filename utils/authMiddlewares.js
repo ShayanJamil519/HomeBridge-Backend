@@ -8,7 +8,7 @@ exports.isAuthenticatedUser = async (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1];
 
     if (token == null) {
-      return res.status(403).send("Unauthorized, No token Provided");
+      return res.status(403).send("You're not logged in. Please login first");
     }
 
     const verify = jwt.verify(token, `${process.env.JWT_SECRET}`);

@@ -10,7 +10,7 @@ const eventApplicationSchema = new mongoose.Schema({
     ref: "Event",
   },
   membershipNumber: String,
-  eventName: String,
+  name: String,
   phoneNumber: String,
   email: String,
   applicationDate: Date,

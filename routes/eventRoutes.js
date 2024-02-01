@@ -1,51 +1,33 @@
-const CelebrityController = require("../controllers/celebrityController");
+const EventController = require("../controllers/eventController");
 const {
-  authorizeAdmin,
   isAuthenticatedUser,
+  authorizeAdmin,
 } = require("../utils/authMiddlewares");
-
 const router = require("express").Router();
 
-router.get("/api/celebrity/search/", CelebrityController.searchCelebrities);
-router.get(
-  "/api/celebrity/details/:id",
-  CelebrityController.getCelebrityDetails
-);
-router.get(
-  "/api/celebrity/getAllFeaturedCelebrities",
-  CelebrityController.getAllFeaturedCelebrities
-);
-router.get(
-  "/api/celebrity/getAllCelebrities",
-  CelebrityController.getAllCelebrities
-);
+// Users
 
+router.get("/api/getAllEvents", EventController.getAllEvents);
+router.get("/api/getSingleEvent/:eventId", EventController.getSingleEvent);
 
+// Admin
 router.post(
-  "/api/celebrity/getCelebritiesByCategories",
-  CelebrityController.getCelebritiesWithSameCategories
-);
-
-
-router.post(
-  "/api/celebrity/addNewCelebrity",
+  "/api/eventRegistration",
   isAuthenticatedUser,
   authorizeAdmin,
-  CelebrityController.addNewCelebrity
+  EventController.eventRegistration
 );
-
-
-
 router.put(
-  "/api/celebrity/update/:id",
+  "/api/editEventRegistration/:eventId",
   isAuthenticatedUser,
   authorizeAdmin,
-  CelebrityController.editCelebrity
+  EventController.editEventRegistration
 );
-
-router.delete('/api/celebrity/delete/:id',  isAuthenticatedUser,
-  authorizeAdmin, CelebrityController.deleteCelebrity);
-
-
+router.delete(
+  "/api/deleteEventRegistration/:eventId",
+  isAuthenticatedUser,
+  authorizeAdmin,
+  EventController.deleteEventRegistration
+);
 
 module.exports = router;
