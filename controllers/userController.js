@@ -115,175 +115,87 @@ module.exports.getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find();
 
-    if (users.length === 0) {
-      return res.json({
-        status: false,
-        message: "No Record Found",
-      });
-    }
-
-    return res.json({
-      status: true,
-      users,
-    });
+    return res.json({ status: true, data: users });
   } catch (ex) {
-    return res.json({ status: false, message: ex.message });
+    return res.status(500).json({ status: false, message: ex.message });
   }
 };
 
 module.exports.getSingleUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const { id } = req.query;
 
-    if (!user) {
-      return res.json({
-        status: false,
-        message: "No record found!",
-      });
+    if (!id) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Insufficient Details" });
     }
 
-    return res.json({
-      status: true,
-      user: user,
-    });
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
+    }
+
+    return res.json({ status: true, data: user });
   } catch (ex) {
-    return res.json({ status: false, message: ex.message });
+    return res.status(500).json({ status: false, message: ex.message });
   }
 };
 
-// // module.exports.updateUser = async (req, res, next) => {
-// //   const { userId } = req.query;
-// //   let { userData } = req.body;
+module.exports.updateUser = async (req, res, next) => {
+  try {
+    const { id } = req.query;
+    if (!id) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Insufficient Details" });
+    }
 
-// //   console.log("userData: ", userData);
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
+    }
 
-// //   if (!userId) {
-// //     return res
-// //       .status(400)
-// //       .json({ status: false, message: "Insufficient credentials" });
-// //   }
+    await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
 
-// //   try {
-// //     const user = await userModel.findById(userId);
-// //     if (!user) {
-// //       return res.status(404).json({ status: false, message: "User not found" });
-// //     }
+    return res.json({
+      status: true,
+      message: "Application updated successfully!",
+    });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
+  }
+};
 
-// //     // Check if image needs to be uploaded
-// //     if (typeof userData.image === "string" && userData.image !== "") {
-// //       // Assuming image is a base64 string or a new file to be uploaded
-// //       const myCloud = await cloudinary.uploader.upload(userData.image, {
-// //         folder: "avatars",
-// //       });
+module.exports.deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.query;
+    if (!id) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Insufficient Details" });
+    }
 
-// //       // Update userData with Cloudinary image info
-// //       userData.image = {
-// //         public_id: myCloud.public_id,
-// //         url: myCloud.secure_url,
-// //       };
-// //     }
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
+    }
 
-// //     const updatedUser = await userModel.findByIdAndUpdate(userId, userData, {
-// //       new: true,
-// //     });
+    await User.findByIdAndDelete(id);
 
-// //     return res.json({
-// //       status: true,
-// //       message: "User details updated successfully",
-// //       user: updatedUser,
-// //     });
-// //   } catch (error) {
-// //     console.log("Error in updateUser: ", error);
-// //     return res
-// //       .status(500)
-// //       .json({ status: false, message: "Internal Server Error" });
-// //   }
-// // };
-
-// module.exports.addFavorite = async (req, res, next) => {
-//   const id = req.params.id;
-//   const { userId } = req.body;
-
-//   try {
-//     const user = await User.findById(userId);
-
-//     if (!user) {
-//       return res.status(404).json({ status: false, message: "User not found" });
-//     }
-
-//     if (user.favorites.includes(id)) {
-//       await User.updateOne({ _id: userId }, { $pull: { favorites: id } });
-//       res.status(200).json("Celebrity Unliked successfully");
-//     } else {
-//       await User.updateOne({ _id: userId }, { $push: { favorites: id } });
-//       res.status(200).json("Celebrity Liked successfully");
-//     }
-//   } catch (ex) {
-//     res.status(500).json({ status: false, message: ex.message });
-//   }
-// };
-
-// module.exports.getFavoriteCelebrities = async (req, res, next) => {
-//   try {
-//     const userId = req.params.userId;
-
-//     // Find user by ID
-//     const user = await User.findById(userId).populate("favorites");
-
-//     if (!user) {
-//       return res.status(404).json({ status: false, message: "User not found" });
-//     }
-
-//     // Extract favorite celebrities from user
-//     const favoriteCelebrities = user.favorites;
-
-//     res.status(200).json({ status: true, data: favoriteCelebrities });
-//   } catch (ex) {
-//     res.status(500).json({ status: false, message: ex.message });
-//   }
-// };
-
-// module.exports.getUserById = async (req, res) => {
-//   try {
-//     const userId = req.params.id;
-
-//     const user = await User.findById(userId);
-
-//     if (!user) {
-//       return res.status(404).json({ status: false, message: "User not found" });
-//     }
-
-//     return res.json({ status: true, data: user });
-//   } catch (error) {
-//     return res.status(500).json({ status: false, message: error.message });
-//   }
-// };
-
-// module.exports.googleAuth = async (req, res, next) => {
-//   console.log("GoogleAuth:", req.body);
-//   try {
-//     const user = await User.findOne({ email: req.body.email });
-//     if (user) {
-//       return res.json({
-//         status: true,
-//         message: "Login Successfull",
-//         userId: user._id,
-//         token: `Bearer ${generateToken(user._id.toString())}`,
-//       });
-//     } else {
-//       const newUser = new User({
-//         ...req.body,
-//       });
-//       const savedUser = await newUser.save();
-
-//       return res.json({
-//         status: true,
-//         message: "Login Successfull",
-//         userId: savedUser._id,
-//         token: `Bearer ${generateToken(savedUser._id.toString())}`,
-//       });
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    return res.json({
+      status: true,
+      message: "Record deleted successfully!",
+    });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
+  }
+};
