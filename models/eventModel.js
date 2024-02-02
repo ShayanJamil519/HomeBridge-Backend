@@ -8,12 +8,16 @@ const eventSchema = new mongoose.Schema({
   productIntroduction: String,
   eventInformation: String,
   productInformation: String,
-  days: [
+  schedules: [
     {
       scheduleIntroduction: String,
-      detailedSchedule: String,
-      scheduleImage: String,
-      dayScheduleInfo: String,
+      daySchedules: [
+        {
+          detailedSchedule: String,
+          scheduleImage: String,
+          dayScheduleInfo: String,
+        },
+      ],
     },
   ],
 });

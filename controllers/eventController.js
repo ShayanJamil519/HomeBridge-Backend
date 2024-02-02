@@ -10,7 +10,7 @@ module.exports.eventRegistration = async (req, res, next) => {
       productIntroduction,
       eventInformation,
       productInformation,
-      days,
+      schedules,
     } = req.body;
 
     const newEvent = await EventModel.create({
@@ -21,7 +21,7 @@ module.exports.eventRegistration = async (req, res, next) => {
       productIntroduction,
       eventInformation,
       productInformation,
-      days,
+      schedules,
     });
 
     return res.status(201).json({
@@ -54,7 +54,7 @@ module.exports.editEventRegistration = async (req, res, next) => {
       productIntroduction,
       eventInformation,
       productInformation,
-      days,
+      schedules,
     } = req.body;
 
     existingEvent.price = price;
@@ -63,7 +63,7 @@ module.exports.editEventRegistration = async (req, res, next) => {
     existingEvent.productIntroduction = productIntroduction;
     existingEvent.eventInformation = eventInformation;
     existingEvent.productInformation = productInformation;
-    existingEvent.days = days;
+    existingEvent.schedules = schedules;
 
     const updatedEvent = await existingEvent.save();
 
