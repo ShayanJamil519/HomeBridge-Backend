@@ -24,6 +24,7 @@ const eventRoute = require("./routes/eventRoutes");
 const eventApplicationRoute = require("./routes/eventApplicationRoutes");
 const jobHouseRoute = require("./routes/jobHouseRoutes");
 const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
+const FRApplicationRoutes = require("./routes/FRApplicationRoutes");
 
 // Routes
 app.use("/", userRoute);
@@ -31,6 +32,7 @@ app.use("/", eventRoute);
 app.use("/", eventApplicationRoute);
 app.use("/", jobHouseRoute);
 app.use("/", jobApplicationRoutes);
+app.use("/", FRApplicationRoutes);
 
 //database connection
 mongoose
