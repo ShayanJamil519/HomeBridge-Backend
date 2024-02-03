@@ -31,6 +31,7 @@ const jobHouseRoute = require("./routes/jobHouseRoutes");
 const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
 const FRApplicationRoutes = require("./routes/FRApplicationRoutes");
 const InquiryRoutes = require("./routes/inquiryRoutes");
+const PaymentRoutes = require("./routes/paymentRoutes");
 
 // Routes
 app.use("/", userRoute);
@@ -40,6 +41,7 @@ app.use("/", jobHouseRoute);
 app.use("/", jobApplicationRoutes);
 app.use("/", FRApplicationRoutes);
 app.use("/", InquiryRoutes);
+app.use("/", PaymentRoutes);
 
 //database connection
 mongoose
