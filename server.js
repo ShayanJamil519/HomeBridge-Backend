@@ -5,16 +5,21 @@ const cors = require("cors");
 const { default: mongoose } = require("mongoose");
 require("dotenv").config();
 
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:3000",
+//       //   "https://fan-gram-admin-panel.vercel.app",
+//       //   "https://fan-gram.vercel.app",
+//     ],
+//   })
+// );
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      //   "https://fan-gram-admin-panel.vercel.app",
-      //   "https://fan-gram.vercel.app",
-    ],
+    origin: "*",
   })
 );
-
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
