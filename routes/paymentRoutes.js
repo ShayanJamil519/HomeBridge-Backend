@@ -31,11 +31,13 @@ router.delete(
 router.get(
   "/api/payment/allRefundRequests",
   isAuthenticatedUser,
+  authorizeAdmin,
   getAllRefundRequests
 );
 router.get(
   "/api/payment/singleRefundRequest",
   isAuthenticatedUser,
+  authorizeAdmin,
   getSingleRefundRequest
 );
 

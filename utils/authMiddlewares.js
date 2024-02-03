@@ -13,29 +13,13 @@ exports.isAuthenticatedUser = async (req, res, next) => {
         .send({ message: "You're not logged in. Please login first" });
     }
 
-    // const verify = jwt.verify(token, `${process.env.JWT_SECRET}`);
-    // if (verify) {
-    //   req.user = await UserModel.findById(verify);
-    //   return next();
-    // } else {
-    //   return res.status(403).send({ message: "Unauthorized Access" });
-    // }
-    const verify = jwt.verify(
-      token,
-      `${process.env.JWT_SECRET}`,
-      async (err, decoded) => {
-        if (err) {
-          // Explicitly handle known errors, e.g., token expired
-          return res
-            .status(403)
-            .send({ message: "Unauthorized Access - Token error" });
-        } else {
-          // Proceed with user lookup and next middleware
-          req.user = await UserModel.findById(decoded.userId); // Assuming userId is stored in the token
-          next();
-        }
-      }
-    );
+    const verify = jwt.verify(token, `${process.env.JWT_SECRET}`);
+    if (verify) {
+      req.user = await UserModel.findById(verify);
+      return next();
+    } else {
+      return res.status(403).send({ message: "Unauthorized Access" });
+    }
   } catch (error) {
     console.error("err", error);
     res.status(401).send({ message: "Unauthorized" });
