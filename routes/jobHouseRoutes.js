@@ -2,6 +2,7 @@ const {
   addJobAndHouseAnnouncement,
   getAllJobAndHouseAnnouncement,
   getSingleJobAndHouseAnnouncement,
+  getAllJobAndHouseAnnouncementWebsite,
 } = require("../controllers/jobHouseController");
 const {
   authorizeAdmin,
@@ -18,9 +19,15 @@ router.post(
 router.get(
   "/api/job_house/allAnnouncements",
   isAuthenticatedUser,
-
   getAllJobAndHouseAnnouncement
 );
+
+router.get(
+  "/api/job_house/allWebsiteAnnouncements",
+  isAuthenticatedUser,
+  getAllJobAndHouseAnnouncementWebsite
+);
+
 router.get(
   "/api/job_house/announcement",
   isAuthenticatedUser,

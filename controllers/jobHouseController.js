@@ -23,6 +23,52 @@ module.exports.getAllJobAndHouseAnnouncement = async (req, res, next) => {
   }
 };
 
+// Website Paginated
+module.exports.getAllJobAndHouseAnnouncementWebsite = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const jobHousePerPage = parseInt(req.query.eventsPerPage) || 8;
+
+    const totalJobHouse = await JobHouse.countDocuments();
+
+    if ((page - 1) * jobHousePerPage >= totalJobHouse) {
+      return res.status(200).json({
+        status: false,
+        message: "No more records",
+      });
+    }
+
+    const allJobHouse = await JobHouse.find()
+      .skip((page - 1) * jobHousePerPage)
+      .limit(jobHousePerPage);
+
+    if (allJobHouse.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No Record Found",
+      });
+    }
+
+    let data = {
+      currentPage: page,
+      jobHousePerPage: jobHousePerPage,
+      totalJobHouse: totalJobHouse,
+      jobHouse: allJobHouse,
+    };
+
+    return res.status(200).json({
+      status: true,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports.getSingleJobAndHouseAnnouncement = async (req, res, next) => {
   try {
     const { id } = req.query;
