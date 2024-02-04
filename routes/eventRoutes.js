@@ -7,7 +7,11 @@ const router = require("express").Router();
 
 // Users
 
-router.get("/api/getAllEvents", EventController.getAllEvents);
+router.get("/api/getAllEventsWebsite", EventController.getAllEventsWebsite);
+router.get(
+  "/api/getAllEventsAdminPanel",
+  EventController.getAllEventsAdminPanel
+);
 router.get("/api/getSingleEvent/:eventId", EventController.getSingleEvent);
 
 // Admin

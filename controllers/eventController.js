@@ -101,7 +101,46 @@ module.exports.deleteEventRegistration = async (req, res, next) => {
   }
 };
 
-module.exports.getAllEvents = async (req, res, next) => {
+// Website Paginated
+module.exports.getAllEventsWebsite = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const eventsPerPage = parseInt(req.query.eventsPerPage) || 8;
+
+    const totalEvents = await EventModel.countDocuments();
+
+    if ((page - 1) * eventsPerPage >= totalEvents) {
+      return res.status(200).json({
+        status: false,
+        message: "No more records",
+      });
+    }
+
+    const allEvents = await EventModel.find()
+      .skip((page - 1) * eventsPerPage)
+      .limit(eventsPerPage);
+
+    if (allEvents.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No Record Found",
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      currentPage: page,
+      eventsPerPage: eventsPerPage,
+      totalEvents: totalEvents,
+      events: allEvents,
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+// Admin Panel Not Paginated
+module.exports.getAllEventsAdminPanel = async (req, res, next) => {
   try {
     const allEvents = await EventModel.find();
 
