@@ -6,7 +6,7 @@ const paymentSchema = new mongoose.Schema({
     ref: "User",
   },
   productNumber: String,
-  productPrice: Number,
+  productPrice: String,
   paymentMethod: String,
   paymentDate: { type: Date, default: Date.now },
   paymentStatus: String,
