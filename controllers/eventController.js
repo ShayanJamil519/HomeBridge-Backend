@@ -27,7 +27,7 @@ module.exports.eventRegistration = async (req, res, next) => {
     return res.status(201).json({
       status: true,
       message: "Event registration successful",
-      event: newEvent,
+      data: newEvent,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
@@ -70,7 +70,7 @@ module.exports.editEventRegistration = async (req, res, next) => {
     return res.status(200).json({
       status: true,
       message: "Event registration updated successfully",
-      event: updatedEvent,
+      data: updatedEvent,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
@@ -127,12 +127,16 @@ module.exports.getAllEventsWebsite = async (req, res, next) => {
       });
     }
 
-    return res.status(200).json({
-      status: true,
+    let data = {
       currentPage: page,
       eventsPerPage: eventsPerPage,
       totalEvents: totalEvents,
       events: allEvents,
+    };
+
+    return res.status(200).json({
+      status: true,
+      data: data,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
@@ -153,7 +157,7 @@ module.exports.getAllEventsAdminPanel = async (req, res, next) => {
 
     return res.status(200).json({
       status: true,
-      events: allEvents,
+      data: allEvents,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
@@ -175,7 +179,7 @@ module.exports.getSingleEvent = async (req, res, next) => {
 
     return res.status(200).json({
       status: true,
-      event: foundEvent,
+      data: foundEvent,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
