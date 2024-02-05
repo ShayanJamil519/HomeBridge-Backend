@@ -9,11 +9,10 @@ const eventApplicationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Event",
   },
-  membershipNumber: String,
   name: String,
   phoneNumber: String,
   email: String,
-  applicationDate: Date,
+  applicationDate: { type: Date, default: Date.now },
   message: String,
 });
 
