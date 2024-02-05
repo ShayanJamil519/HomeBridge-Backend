@@ -24,13 +24,13 @@ router.get(
 
 router.get(
   "/api/job_house/allWebsiteAnnouncements",
-  isAuthenticatedUser,
+  // isAuthenticatedUser,
   getAllJobAndHouseAnnouncementWebsite
 );
 
 router.get(
   "/api/job_house/announcement",
-  isAuthenticatedUser,
+  // isAuthenticatedUser,
   getSingleJobAndHouseAnnouncement
 );
 
