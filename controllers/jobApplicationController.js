@@ -83,6 +83,24 @@ module.exports.getAllApplications = async (req, res, next) => {
   }
 };
 
+module.exports.getMyApplications = async (req, res, next) => {
+  try {
+    const applications = await JobApplication.find({ user: req.user }).populate(
+      "job",
+      "isAccomodated announcementName"
+    );
+
+    if (applications.length === 0) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
+    }
+    return res.json({ status: true, data: applications });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
+  }
+};
+
 module.exports.getSingleApplication = async (req, res, next) => {
   try {
     const { id } = req.query;
