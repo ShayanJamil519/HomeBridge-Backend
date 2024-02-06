@@ -14,6 +14,9 @@ const JobHouseSchema = new mongoose.Schema({
   explanation: String,
   externalFeatures: String,
   contractInformation: String,
+  salary: String,
+  rent: String,
+
   registerationDate: { type: Date, default: Date.now },
 });
 
