@@ -146,6 +146,40 @@ module.exports.getAllEventsWebsite = async (req, res, next) => {
 
 // Admin Panel Not Paginated
 
+// module.exports.getAllEventsAdminPanel = async (req, res, next) => {
+//   try {
+//     const allEvents = await EventModel.aggregate([
+//       {
+//         $lookup: {
+//           from: "eventapplications",
+//           localField: "_id",
+//           foreignField: "event",
+//           as: "applicants",
+//         },
+//       },
+//       {
+//         $addFields: {
+//           numberOfApplicants: { $size: "$applicants" },
+//         },
+//       },
+//     ]);
+
+//     if (allEvents.length === 0) {
+//       return res.status(200).json({
+//         status: false,
+//         message: "No Record Found",
+//       });
+//     }
+
+//     return res.status(200).json({
+//       status: true,
+//       data: allEvents,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ status: false, message: error.message });
+//   }
+// };
+
 module.exports.getAllEventsAdminPanel = async (req, res, next) => {
   try {
     const allEvents = await EventModel.aggregate([
@@ -160,6 +194,11 @@ module.exports.getAllEventsAdminPanel = async (req, res, next) => {
       {
         $addFields: {
           numberOfApplicants: { $size: "$applicants" },
+        },
+      },
+      {
+        $project: {
+          applicants: 0,
         },
       },
     ]);
