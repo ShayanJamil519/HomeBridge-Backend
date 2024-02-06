@@ -6,6 +6,8 @@ const {
   adminLogin,
   updateUser,
   deleteUser,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/userController");
 const {
   isAuthenticatedUser,
@@ -37,5 +39,8 @@ router.delete(
   authorizeAdmin,
   deleteUser
 );
+
+router.post("/api/user/forgotPassword", forgotPassword);
+router.post("/api/user/resetPassword", resetPassword);
 
 module.exports = router;
