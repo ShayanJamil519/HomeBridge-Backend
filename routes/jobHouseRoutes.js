@@ -3,6 +3,8 @@ const {
   getAllJobAndHouseAnnouncement,
   getSingleJobAndHouseAnnouncement,
   getAllJobAndHouseAnnouncementWebsite,
+  updateAnnouncement,
+  deleteAnnouncement,
 } = require("../controllers/jobHouseController");
 const {
   authorizeAdmin,
@@ -32,6 +34,19 @@ router.get(
   "/api/job_house/announcement",
   // isAuthenticatedUser,
   getSingleJobAndHouseAnnouncement
+);
+
+router.put(
+  "/api/job_house/updateAnnouncement",
+  isAuthenticatedUser,
+  authorizeAdmin,
+  updateAnnouncement
+);
+router.delete(
+  "/api/job_house/deleteAnnouncement",
+  isAuthenticatedUser,
+  authorizeAdmin,
+  deleteAnnouncement
 );
 
 module.exports = router;

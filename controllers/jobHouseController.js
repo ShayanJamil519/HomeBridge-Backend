@@ -1,4 +1,5 @@
 const JobHouse = require("../models/jobHouseModel");
+const JobApplication = require("../models/jobHouseApplicationModel");
 
 module.exports.addJobAndHouseAnnouncement = async (req, res, next) => {
   try {
@@ -87,6 +88,66 @@ module.exports.getSingleJobAndHouseAnnouncement = async (req, res, next) => {
     }
 
     return res.json({ status: true, data: announcement });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
+  }
+};
+
+module.exports.updateAnnouncement = async (req, res, next) => {
+  try {
+    const { id } = req.query;
+    if (!id) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Insufficient Details" });
+    }
+
+    const announcement = await JobHouse.findById(id);
+    if (!announcement) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
+    }
+
+    await JobHouse.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    return res.json({
+      status: true,
+      message: "Announcement updated successfully!",
+    });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
+  }
+};
+
+module.exports.deleteAnnouncement = async (req, res, next) => {
+  try {
+    const { id } = req.query;
+    if (!id) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Insufficient Details" });
+    }
+
+    const announcement = await JobHouse.findById(id);
+    if (!announcement) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
+    }
+
+    // Delete the job announcement
+    await JobHouse.findByIdAndDelete(id);
+
+    // Delete job applications related to the job
+    await JobApplication.deleteMany({ job: id });
+
+    return res.json({
+      status: true,
+      message: "Record deleted successfully!",
+    });
   } catch (ex) {
     return res.status(500).json({ status: false, message: ex.message });
   }

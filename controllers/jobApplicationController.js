@@ -2,6 +2,16 @@ const JobApplication = require("../models/jobHouseApplicationModel");
 
 module.exports.createApplication = async (req, res, next) => {
   try {
+    const isApplicationExists = await JobApplication.findOne({
+      job: req.body.job.toString(),
+      user: req.body.user.toString(),
+    });
+    if (isApplicationExists) {
+      return res.status(500).json({
+        status: false,
+        message: "Your application already exists on this job",
+      });
+    }
     const application = await JobApplication.create(req.body);
 
     return res.json({
@@ -87,7 +97,7 @@ module.exports.getMyApplications = async (req, res, next) => {
   try {
     const applications = await JobApplication.find({ user: req.user }).populate(
       "job",
-      "isAccomodated announcementName"
+      "isAccomodated announcementName salary rent"
     );
 
     if (applications.length === 0) {
