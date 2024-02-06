@@ -4,6 +4,7 @@ const {
   getSingleApplication,
   updateApplication,
   deleteApplication,
+  getAllMyApplications,
 } = require("../controllers/frAppllicationCotroller");
 const {
   authorizeAdmin,
@@ -32,6 +33,11 @@ router.get(
   "/api/f_2_r/allApplications",
   isAuthenticatedUser,
   getAllApplications
+);
+router.get(
+  "/api/f_2_r/myApplications",
+  isAuthenticatedUser,
+  getAllMyApplications
 );
 router.get("/api/f_2_r/application", isAuthenticatedUser, getSingleApplication);
 

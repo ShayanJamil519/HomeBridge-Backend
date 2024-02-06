@@ -61,6 +61,7 @@ module.exports.login = async (req, res, next) => {
       message: "Login Successfull",
       user: {
         userId: user._id,
+        userName: user.userName,
         token: `Bearer ${generateToken(user._id.toString())}`,
       },
     });

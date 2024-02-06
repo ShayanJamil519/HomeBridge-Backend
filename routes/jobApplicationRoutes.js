@@ -4,6 +4,7 @@ const {
   getSingleApplication,
   updateApplication,
   deleteApplication,
+  getMyApplications,
 } = require("../controllers/jobApplicationController");
 const {
   authorizeAdmin,
@@ -32,6 +33,11 @@ router.get(
   "/api/job_house_application/allApplications",
   isAuthenticatedUser,
   getAllApplications
+);
+router.get(
+  "/api/job_house_application/myApplications",
+  isAuthenticatedUser,
+  getMyApplications
 );
 router.get(
   "/api/job_house_application/application",

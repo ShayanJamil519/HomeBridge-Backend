@@ -11,7 +11,7 @@ const {
 } = require("../utils/authMiddlewares");
 const router = require("express").Router();
 
-router.post("/api/inquiry/createInquiry", isAuthenticatedUser, createInquiry);
+router.post("/api/inquiry/createInquiry", createInquiry);
 router.put(
   "/api/inquiry/updateInquiry",
   isAuthenticatedUser,
