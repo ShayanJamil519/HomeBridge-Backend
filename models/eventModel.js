@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 
 const eventSchema = new mongoose.Schema({
-  price: Number,
-  deadline: Date,
-  registrationDate: Date,
+  price: String,
+  registrationDate: { type: Date, default: Date.now },
   productIntroduction: String,
-  eventInformation: String,
+  departure: Date,
+  arrival: Date,
+  deadline: Date,
+  traffic: String,
   productInformation: String,
   schedules: [
     {
