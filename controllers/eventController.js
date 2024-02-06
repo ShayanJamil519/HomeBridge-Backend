@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const EventModel = require("../models/eventModel");
 
 // Admin
@@ -167,6 +168,13 @@ module.exports.getAllEventsAdminPanel = async (req, res, next) => {
 module.exports.getSingleEvent = async (req, res, next) => {
   try {
     const { eventId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+      return res.status(400).json({
+        status: false,
+        message: "Invalid event ID",
+      });
+    }
 
     const foundEvent = await EventModel.findById(eventId);
 
