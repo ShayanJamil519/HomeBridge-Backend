@@ -145,9 +145,24 @@ module.exports.getAllEventsWebsite = async (req, res, next) => {
 };
 
 // Admin Panel Not Paginated
+
 module.exports.getAllEventsAdminPanel = async (req, res, next) => {
   try {
-    const allEvents = await EventModel.find();
+    const allEvents = await EventModel.aggregate([
+      {
+        $lookup: {
+          from: "eventapplications",
+          localField: "_id",
+          foreignField: "event",
+          as: "applicants",
+        },
+      },
+      {
+        $addFields: {
+          numberOfApplicants: { $size: "$applicants" },
+        },
+      },
+    ]);
 
     if (allEvents.length === 0) {
       return res.status(200).json({
