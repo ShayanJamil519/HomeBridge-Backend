@@ -13,7 +13,7 @@ router.post(
 
 // Get All Application (Admin)
 router.get(
-  "/api/getAllApplications/:eventId",
+  "/api/getAllApplications",
   isAuthenticatedUser,
   authorizeAdmin,
   EventApplicationController.getAllApplications

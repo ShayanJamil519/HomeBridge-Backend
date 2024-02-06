@@ -52,7 +52,10 @@ module.exports.createEventApplication = async (req, res, next) => {
 // Get All Application (Admin)
 module.exports.getAllApplications = async (req, res, next) => {
   try {
-    const allApplications = await EventApplicationModel.find();
+    const allApplications = await EventApplicationModel.find().populate(
+      "event",
+      "productIntroduction"
+    );
 
     if (allApplications.length === 0) {
       return res.status(200).json({
@@ -69,7 +72,6 @@ module.exports.getAllApplications = async (req, res, next) => {
     res.status(500).json({ status: false, message: error.message });
   }
 };
-
 // Get Single Application (Admin)
 module.exports.getSingleApplication = async (req, res, next) => {
   try {
