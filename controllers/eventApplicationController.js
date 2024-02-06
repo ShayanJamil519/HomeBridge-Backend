@@ -66,7 +66,7 @@ module.exports.getAllApplications = async (req, res, next) => {
 
     return res.status(200).json({
       status: true,
-      applications: allApplications,
+      data: allApplications,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
@@ -90,7 +90,7 @@ module.exports.getSingleApplication = async (req, res, next) => {
 
     return res.status(200).json({
       status: true,
-      application: foundApplication,
+      data: foundApplication,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
@@ -118,7 +118,7 @@ module.exports.getAllApplicationsOfEvent = async (req, res, next) => {
 
     return res.status(200).json({
       status: true,
-      applications: eventApplications,
+      data: eventApplications,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
@@ -155,7 +155,7 @@ module.exports.getSingleApplicationOfEvent = async (req, res, next) => {
 
     return res.status(200).json({
       status: true,
-      application: eventApplication,
+      data: eventApplication,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
