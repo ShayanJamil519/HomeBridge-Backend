@@ -157,6 +157,26 @@ module.exports.getSingleApplication = async (req, res, next) => {
   }
 };
 
+module.exports.getAllMyApplications = async (req, res, next) => {
+  try {
+    const myApplications = await EventApplicationModel.find().populate("event");
+
+    if (myApplications.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No Record Found",
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      data: myApplications,
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 // =============================
 // Ignore below
 

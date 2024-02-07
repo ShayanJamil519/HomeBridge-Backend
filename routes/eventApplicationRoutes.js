@@ -39,8 +39,13 @@ router.get(
 router.get(
   "/api/getSingleApplication/:applicationId",
   isAuthenticatedUser,
-  authorizeAdmin,
   EventApplicationController.getSingleApplication
+);
+
+router.get(
+  "/api/getAllMyApplication",
+  isAuthenticatedUser,
+  EventApplicationController.getAllMyApplications
 );
 
 // ======================

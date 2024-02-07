@@ -5,12 +5,19 @@ const paymentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  productNumber: String,
-  productPrice: String,
+  event: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Event",
+  },
   paymentMethod: String,
-  paymentDate: { type: Date, default: Date.now },
-  paymentStatus: String,
+  refundAmount: String,
+  // situation ("Complete payment", "Event completed", "Refund completed", "Request for refund")
+  paymentStatus: { type: String, default: "Complete payment" },
   refundDate: { type: Date, default: Date.now },
+  // account details:
+  accountNumber: String,
+  accountName: String,
+  bankName: String,
 });
 
 module.exports = mongoose.model("Payment", paymentSchema);
