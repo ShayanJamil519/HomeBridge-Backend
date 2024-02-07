@@ -4,26 +4,7 @@ const EventModel = require("../models/eventModel");
 // Admin
 module.exports.eventRegistration = async (req, res, next) => {
   try {
-    const {
-      price,
-      deadline,
-      noOfApplicants,
-      productIntroduction,
-      eventInformation,
-      productInformation,
-      schedules,
-    } = req.body;
-
-    const newEvent = await EventModel.create({
-      price,
-      deadline,
-      noOfApplicants,
-      registrationDate: new Date(),
-      productIntroduction,
-      eventInformation,
-      productInformation,
-      schedules,
-    });
+    const newEvent = await EventModel.create(req.body);
 
     return res.status(201).json({
       status: true,
@@ -51,18 +32,20 @@ module.exports.editEventRegistration = async (req, res, next) => {
     const {
       price,
       deadline,
-      noOfApplicants,
       productIntroduction,
-      eventInformation,
+      departure,
+      arrival,
+      traffic,
       productInformation,
       schedules,
     } = req.body;
 
     existingEvent.price = price;
+    existingEvent.departure = departure;
+    existingEvent.arrival = arrival;
+    existingEvent.traffic = traffic;
     existingEvent.deadline = deadline;
-    existingEvent.noOfApplicants = noOfApplicants;
     existingEvent.productIntroduction = productIntroduction;
-    existingEvent.eventInformation = eventInformation;
     existingEvent.productInformation = productInformation;
     existingEvent.schedules = schedules;
 

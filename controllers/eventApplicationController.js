@@ -35,7 +35,6 @@ module.exports.createEventApplication = async (req, res, next) => {
       name,
       phoneNumber,
       email,
-      applicationDate: new Date(),
       message,
     });
 

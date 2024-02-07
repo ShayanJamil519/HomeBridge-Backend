@@ -63,16 +63,14 @@ module.exports.deleteApplication = async (req, res, next) => {
 
     const application = await JobApplication.findById(id);
     if (!application) {
-      return res
-        .status(404)
-        .json({ status: false, message: "No Record Found" });
+      return res.status(404).json({ status: false, message: "No Job Found" });
     }
 
     await JobApplication.findByIdAndDelete(id);
 
     return res.json({
       status: true,
-      message: "Record deleted successfully!",
+      message: "Job deleted successfully!",
     });
   } catch (ex) {
     return res.status(500).json({ status: false, message: ex.message });
