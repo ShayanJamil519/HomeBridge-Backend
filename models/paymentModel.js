@@ -5,15 +5,17 @@ const paymentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  // product Number
   event: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Event",
   },
-  paymentMethod: String,
+  eventApplication: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "EventApplication",
+  },
   refundAmount: String,
-  // situation ("Complete payment", "Event completed", "Refund completed", "Request for refund")
-  paymentStatus: { type: String, default: "Complete payment" },
-  refundDate: { type: Date, default: Date.now },
+  refundDate: Date,
   // account details:
   accountNumber: String,
   accountName: String,
