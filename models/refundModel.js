@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const paymentSchema = new mongoose.Schema({
+const refundSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -22,4 +22,4 @@ const paymentSchema = new mongoose.Schema({
   bankName: String,
 });
 
-module.exports = mongoose.model("Payment", paymentSchema);
+module.exports = mongoose.model("Refund", refundSchema);

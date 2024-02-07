@@ -139,7 +139,7 @@ module.exports.getSingleApplication = async (req, res, next) => {
 
     const foundApplication = await EventApplicationModel.findById(
       applicationId
-    ).populate("event", "productIntroduction");
+    ).populate("event");
 
     if (!foundApplication) {
       return res.status(404).json({

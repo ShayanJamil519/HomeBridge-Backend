@@ -4,7 +4,7 @@ const {
   deleteRefundRequest,
   getAllRefundRequests,
   getSingleRefundRequest,
-} = require("../controllers/paymentController");
+} = require("../controllers/refundController");
 const {
   authorizeAdmin,
   isAuthenticatedUser,
@@ -12,30 +12,30 @@ const {
 const router = require("express").Router();
 
 router.post(
-  "/api/payment/createRefundRequest",
+  "/api/refund/createRefundRequest",
   isAuthenticatedUser,
   createRefundRequest
 );
 router.put(
-  "/api/payment/updateRefundRequest",
+  "/api/refund/updateRefundRequest",
   isAuthenticatedUser,
   authorizeAdmin,
   updateRefundRequest
 );
 router.delete(
-  "/api/payment/deleteRefundRequest",
+  "/api/refund/deleteRefundRequest",
   isAuthenticatedUser,
   authorizeAdmin,
   deleteRefundRequest
 );
 router.get(
-  "/api/payment/allRefundRequests",
+  "/api/refund/allRefundRequests",
   isAuthenticatedUser,
   authorizeAdmin,
   getAllRefundRequests
 );
 router.get(
-  "/api/payment/singleRefundRequest",
+  "/api/refund/singleRefundRequest",
   isAuthenticatedUser,
   authorizeAdmin,
   getSingleRefundRequest
