@@ -1,7 +1,8 @@
+const { default: mongoose } = require("mongoose");
 const EventApplicationModel = require("../models/eventApplicationModel");
 const EventModel = require("../models/eventModel");
 
-// Creates New Event Application
+// Creates New Event Application (User)
 module.exports.createEventApplication = async (req, res, next) => {
   try {
     const { name, phoneNumber, email, message } = req.body;
@@ -48,6 +49,66 @@ module.exports.createEventApplication = async (req, res, next) => {
   }
 };
 
+// Edit Event Application (Admin)
+module.exports.editEventApplication = async (req, res, next) => {
+  try {
+    const { applicationId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(applicationId)) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Invalid Application Id" });
+    }
+
+    const application = await EventApplicationModel.findById(applicationId);
+    if (!application) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Application Found" });
+    }
+
+    await EventApplicationModel.findByIdAndUpdate(applicationId, req.body, {
+      new: true,
+    });
+
+    return res.json({
+      status: true,
+      message: "Application updated successfully!",
+    });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
+  }
+};
+
+// Delete Event Application (Admin)
+module.exports.deleteEventApplication = async (req, res, next) => {
+  try {
+    const { applicationId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(applicationId)) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Invalid Application Id" });
+    }
+
+    const application = await EventApplicationModel.findById(applicationId);
+    if (!application) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Application Found" });
+    }
+
+    await EventApplicationModel.findByIdAndDelete(applicationId);
+
+    return res.json({
+      status: true,
+      message: "Event Application deleted successfully!",
+    });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
+  }
+};
+
 // Get All Application (Admin)
 module.exports.getAllApplications = async (req, res, next) => {
   try {
@@ -78,7 +139,7 @@ module.exports.getSingleApplication = async (req, res, next) => {
 
     const foundApplication = await EventApplicationModel.findById(
       applicationId
-    );
+    ).populate("event", "productIntroduction");
 
     if (!foundApplication) {
       return res.status(404).json({
@@ -95,6 +156,9 @@ module.exports.getSingleApplication = async (req, res, next) => {
     res.status(500).json({ status: false, message: error.message });
   }
 };
+
+// =============================
+// Ignore below
 
 // Get All Applications of a particular event (Admin)
 module.exports.getAllApplicationsOfEvent = async (req, res, next) => {

@@ -9,6 +9,10 @@ const eventApplicationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Event",
   },
+  payment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Payment",
+  },
   name: String,
   phoneNumber: String,
   email: String,

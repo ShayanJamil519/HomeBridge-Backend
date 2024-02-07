@@ -11,6 +11,22 @@ router.post(
   EventApplicationController.createEventApplication
 );
 
+// Edit Application (Admin)
+router.put(
+  "/api/editEventApplication/:applicationId",
+  isAuthenticatedUser,
+  authorizeAdmin,
+  EventApplicationController.editEventApplication
+);
+
+// Delete Application (Admin)
+router.delete(
+  "/api/deleteEventApplication/:applicationId",
+  isAuthenticatedUser,
+  authorizeAdmin,
+  EventApplicationController.deleteEventApplication
+);
+
 // Get All Application (Admin)
 router.get(
   "/api/getAllApplications",
@@ -26,6 +42,9 @@ router.get(
   authorizeAdmin,
   EventApplicationController.getSingleApplication
 );
+
+// ======================
+// Ignore Below APIs
 
 // Get All Applications of a particular event (Admin)
 router.get(
