@@ -32,6 +32,82 @@ async function getTotalPaymentSum(model, filter = {}) {
   }
 }
 
+// // Function to get user count by month for a specific year
+// async function getUserCountByMonth(model, year) {
+//   try {
+//     const monthsArray = await model.aggregate([
+//       {
+//         $match: {
+//           createdAt: {
+//             $gte: new Date(year, 0, 1),
+//             $lt: new Date(year + 1, 0, 1),
+//           },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: { $month: "$createdAt" },
+//           count: { $sum: 1 },
+//         },
+//       },
+//       {
+//         $sort: { _id: 1 }, // Sort by month ascending
+//       },
+//     ]);
+
+//     // Initialize an array of 12 elements for each month, default to 0
+//     let monthlyCounts = new Array(12).fill(0);
+
+//     // Populate the array with counts from the aggregation result
+//     monthsArray.forEach((month) => {
+//       monthlyCounts[month._id - 1] = month.count; // _id is the month number, array index is month number - 1
+//     });
+
+//     return monthlyCounts;
+//   } catch (error) {
+//     console.error("Error fetching user count by month:", error);
+//     return error;
+//   }
+// }
+
+// General function to get count by month for a specific year and model
+async function getCountByMonth(model, year, dateField) {
+  try {
+    const monthsArray = await model.aggregate([
+      {
+        $match: {
+          [dateField]: {
+            $gte: new Date(year, 0, 1),
+            $lt: new Date(year + 1, 0, 1),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: `$${dateField}` },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 }, // Sort by month ascending
+      },
+    ]);
+
+    // Initialize an array of 12 elements for each month, default to 0
+    let monthlyCounts = new Array(12).fill(0);
+
+    // Populate the array with counts from the aggregation result
+    monthsArray.forEach((month) => {
+      monthlyCounts[month._id - 1] = month.count; // _id is the month number, array index is month number - 1
+    });
+
+    return monthlyCounts;
+  } catch (error) {
+    console.error("Error fetching count by month:", error);
+    return error;
+  }
+}
+
 // API endpoint to get total counts and sums
 module.exports.getAllCounters = async (req, res, next) => {
   try {
@@ -62,13 +138,13 @@ module.exports.getAllCounters = async (req, res, next) => {
     const dailyJobHousesApplications = await getTotalCount(
       JobHouseApplicationModel,
       {
-        registerationDate: { $gte: new Date(new Date() - 24 * 60 * 60 * 1000) },
+        applicationDate: { $gte: new Date(new Date() - 24 * 60 * 60 * 1000) },
       }
     );
     const monthlyJobHousesApplications = await getTotalCount(
       JobHouseApplicationModel,
       {
-        registerationDate: {
+        applicationDate: {
           $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
         },
       }
@@ -76,7 +152,7 @@ module.exports.getAllCounters = async (req, res, next) => {
     const yearlyJobHousesApplications = await getTotalCount(
       JobHouseApplicationModel,
       {
-        registerationDate: { $gte: new Date(new Date().getFullYear(), 0, 1) },
+        applicationDate: { $gte: new Date(new Date().getFullYear(), 0, 1) },
       }
     );
 
@@ -107,6 +183,30 @@ module.exports.getAllCounters = async (req, res, next) => {
       applicationDate: { $gte: new Date(new Date().getFullYear(), 0, 1) },
     });
 
+    const currentYear = new Date().getFullYear();
+    const userCountsByMonth = await getCountByMonth(
+      UserModel,
+      currentYear,
+      "createdAt"
+    );
+    const eventApplicationCountsByMonth = await getCountByMonth(
+      EventApplicationModel,
+      currentYear,
+      "applicationDate"
+    );
+    const f2rApplicationCountsByMonth = await getCountByMonth(
+      FRApplicationModel,
+      currentYear,
+      "applicationDate"
+    );
+    const jobHouseCountsByMonth = await getCountByMonth(
+      JobHouseApplicationModel,
+      currentYear,
+      "applicationDate"
+    );
+
+    const totalUsers = await getTotalCount(UserModel);
+
     return res.json({
       status: true,
       data: {
@@ -125,6 +225,11 @@ module.exports.getAllCounters = async (req, res, next) => {
         dailyPaymentSum,
         monthlyPaymentSum,
         yearlyPaymentSum,
+        userCountsByMonth,
+        totalUsers,
+        eventApplicationCountsByMonth,
+        f2rApplicationCountsByMonth,
+        jobHouseCountsByMonth,
       },
     });
   } catch (error) {
