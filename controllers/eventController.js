@@ -45,9 +45,11 @@ module.exports.editEventRegistration = async (req, res, next) => {
       traffic,
       productInformation,
       schedules,
+      eventImages,
     } = req.body;
 
     existingEvent.price = price;
+    existingEvent.eventImages = eventImages;
     existingEvent.departure = departure;
     existingEvent.arrival = arrival;
     existingEvent.traffic = traffic;
