@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const EventModel = require("../models/eventModel");
+const EventApplicationModel = require("../models/eventApplicationModel");
 
 // Admin
 module.exports.eventRegistration = async (req, res, next) => {
@@ -20,6 +21,12 @@ module.exports.eventRegistration = async (req, res, next) => {
 module.exports.editEventRegistration = async (req, res, next) => {
   try {
     const { eventId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Invalid Event Id" });
+    }
 
     const existingEvent = await EventModel.findById(eventId);
     if (!existingEvent) {
@@ -66,22 +73,37 @@ module.exports.deleteEventRegistration = async (req, res, next) => {
   try {
     const { eventId } = req.params;
 
-    const existingEvent = await EventModel.findById(eventId);
-    if (!existingEvent) {
-      return res.status(404).json({
-        status: false,
-        message: "Event not found",
-      });
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Invalid Event Id" });
     }
 
-    await existingEvent.remove();
+    if (!eventId) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Insufficient Details" });
+    }
 
-    return res.status(200).json({
+    const event = await EventModel.findById(eventId);
+    if (!event) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No Record Found" });
+    }
+
+    // Delete the event
+    await EventModel.findByIdAndDelete(eventId);
+
+    // Delete event applications related to the event
+    await EventApplicationModel.deleteMany({ event: eventId });
+
+    return res.json({
       status: true,
-      message: "Event registration deleted successfully",
+      message: "Event deleted successfully!",
     });
-  } catch (error) {
-    res.status(500).json({ status: false, message: error.message });
+  } catch (ex) {
+    return res.status(500).json({ status: false, message: ex.message });
   }
 };
 
