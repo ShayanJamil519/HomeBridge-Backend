@@ -24,6 +24,7 @@ app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 // // Routes Imports
+const counterRoutes = require("./routes/countersRoute");
 const userRoute = require("./routes/userRoutes");
 const eventRoute = require("./routes/eventRoutes");
 const eventApplicationRoute = require("./routes/eventApplicationRoutes");
@@ -34,6 +35,7 @@ const InquiryRoutes = require("./routes/inquiryRoutes");
 const RefundRoutes = require("./routes/refundRoutes");
 
 // Routes
+app.use("/", counterRoutes);
 app.use("/", userRoute);
 app.use("/", eventRoute);
 app.use("/", eventApplicationRoute);
