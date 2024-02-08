@@ -159,7 +159,9 @@ module.exports.getSingleApplication = async (req, res, next) => {
 
 module.exports.getAllMyApplications = async (req, res, next) => {
   try {
-    const myApplications = await EventApplicationModel.find().populate("event");
+    const myApplications = await EventApplicationModel.find({
+      user: req.user,
+    }).populate("event");
 
     if (myApplications.length === 0) {
       return res.status(200).json({
