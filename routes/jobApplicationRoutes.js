@@ -19,19 +19,17 @@ router.post(
 );
 router.put(
   "/api/job_house_application/updateApplication",
-  isAuthenticatedUser,
   authorizeAdmin,
   updateApplication
 );
 router.delete(
   "/api/job_house_application/deleteApplication",
-  isAuthenticatedUser,
   authorizeAdmin,
   deleteApplication
 );
 router.get(
   "/api/job_house_application/allApplications",
-  isAuthenticatedUser,
+  authorizeAdmin,
   getAllApplications
 );
 router.get(

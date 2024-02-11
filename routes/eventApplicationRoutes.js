@@ -14,7 +14,6 @@ router.post(
 // Edit Application (Admin)
 router.put(
   "/api/editEventApplication/:applicationId",
-  isAuthenticatedUser,
   authorizeAdmin,
   EventApplicationController.editEventApplication
 );
@@ -22,7 +21,6 @@ router.put(
 // Delete Application (Admin)
 router.delete(
   "/api/deleteEventApplication/:applicationId",
-  isAuthenticatedUser,
   authorizeAdmin,
   EventApplicationController.deleteEventApplication
 );
@@ -30,7 +28,6 @@ router.delete(
 // Get All Application (Admin)
 router.get(
   "/api/getAllApplications",
-  isAuthenticatedUser,
   authorizeAdmin,
   EventApplicationController.getAllApplications
 );
@@ -54,7 +51,6 @@ router.get(
 // Get All Applications of a particular event (Admin)
 router.get(
   "/api/getAllApplicationsOfEvent/:eventId",
-  isAuthenticatedUser,
   authorizeAdmin,
   EventApplicationController.getAllApplicationsOfEvent
 );
@@ -62,7 +58,6 @@ router.get(
 // Get Single Application of a particular event (Admin)
 router.get(
   "/api/getSingleApplicationOfEvent/event/:eventId/application/:applicationId",
-  isAuthenticatedUser,
   authorizeAdmin,
   EventApplicationController.getSingleApplicationOfEvent
 );

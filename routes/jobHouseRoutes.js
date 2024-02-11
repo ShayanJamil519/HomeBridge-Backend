@@ -14,7 +14,6 @@ const router = require("express").Router();
 
 router.post(
   "/api/job_house/createAnnouncement",
-  isAuthenticatedUser,
   authorizeAdmin,
   addJobAndHouseAnnouncement
 );
@@ -38,13 +37,11 @@ router.get(
 
 router.put(
   "/api/job_house/updateAnnouncement",
-  isAuthenticatedUser,
   authorizeAdmin,
   updateAnnouncement
 );
 router.delete(
   "/api/job_house/deleteAnnouncement",
-  isAuthenticatedUser,
   authorizeAdmin,
   deleteAnnouncement
 );

@@ -17,15 +17,9 @@ router.post(
   isAuthenticatedUser,
   createApplication
 );
-router.put(
-  "/api/f_2_r/updateApplication",
-  isAuthenticatedUser,
-  authorizeAdmin,
-  updateApplication
-);
+router.put("/api/f_2_r/updateApplication", authorizeAdmin, updateApplication);
 router.delete(
   "/api/f_2_r/deleteApplication",
-  isAuthenticatedUser,
   authorizeAdmin,
   deleteApplication
 );

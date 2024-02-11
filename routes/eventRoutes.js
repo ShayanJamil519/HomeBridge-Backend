@@ -17,19 +17,16 @@ router.get("/api/getSingleEvent/:eventId", EventController.getSingleEvent);
 // Admin
 router.post(
   "/api/eventRegistration",
-  isAuthenticatedUser,
   authorizeAdmin,
   EventController.eventRegistration
 );
 router.put(
   "/api/editEventRegistration/:eventId",
-  isAuthenticatedUser,
   authorizeAdmin,
   EventController.editEventRegistration
 );
 router.delete(
   "/api/deleteEventRegistration/:eventId",
-  isAuthenticatedUser,
   authorizeAdmin,
   EventController.deleteEventRegistration
 );
