@@ -55,13 +55,3 @@ exports.authorizeAdmin = async (req, res, next) => {
     res.status(401).send({ message: "Unauthorized" });
   }
 };
-
-// exports.authorizeAdmin = (req, res, next) => {
-// if (!req.user || req.user.role !== "admin") {
-//   return res
-//     .status(403)
-//     .json({ message: "Forbidden: Admin access required" });
-// }
-
-//   next();
-// };
