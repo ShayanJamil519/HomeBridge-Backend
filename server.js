@@ -5,6 +5,8 @@ const cors = require("cors");
 const { default: mongoose } = require("mongoose");
 require("dotenv").config();
 
+const PORT = process.env.PORT || 5000;
+
 app.use(
   cors({
     origin: "*",
@@ -49,6 +51,6 @@ mongoose
     console.log("err: ", err.message);
   });
 
-app.listen(5000, () => {
-  console.log("server listening on port ", 5000);
+app.listen(PORT, () => {
+  console.log("server listening on port ", PORT);
 });
