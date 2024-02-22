@@ -13,6 +13,10 @@ app.use(
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
+app.get("/", async (req, res) => {
+  res.json({ message: "server running!!!" });
+});
+
 // // Routes Imports
 const counterRoutes = require("./routes/countersRoute");
 const userRoute = require("./routes/userRoutes");
@@ -39,7 +43,7 @@ app.use("/", RefundRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("DB Connetion Successfull");
+    console.log("DB Connetion Successfull ", process.env.MONGO_URI);
   })
   .catch((err) => {
     console.log("err: ", err.message);
