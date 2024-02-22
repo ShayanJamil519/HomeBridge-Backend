@@ -43,7 +43,7 @@ app.use("/", RefundRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("DB Connetion Successfull ", process.env.MONGO_URI);
+    console.log("DB Connetion Successfull");
   })
   .catch((err) => {
     console.log("err: ", err.message);
