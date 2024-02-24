@@ -6,7 +6,7 @@ module.exports.createApplication = async (req, res, next) => {
 
     return res.json({
       status: true,
-      message: "Application created successfully!",
+      message: "Application submitted successfully!",
     });
   } catch (ex) {
     return res.status(500).json({ status: false, message: ex.message });
@@ -84,7 +84,7 @@ module.exports.getAllApplications = async (req, res, next) => {
 };
 module.exports.getAllMyApplications = async (req, res, next) => {
   try {
-    const applications = await FRApplication.find({ user: req.user });
+    const applications = await FRApplication.find({ user: req?.user?._id });
     if (applications.length === 0) {
       return res
         .status(404)

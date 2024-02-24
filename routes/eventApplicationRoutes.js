@@ -38,7 +38,7 @@ router.get(
 // Get Single Application (Admin)
 router.get(
   "/api/getSingleApplication/:applicationId",
-  authorizeAdmin,
+
   isAuthenticatedUser,
   EventApplicationController.getSingleApplication
 );
