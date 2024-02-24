@@ -16,7 +16,7 @@ module.exports.createApplication = async (req, res, next) => {
 
     return res.json({
       status: true,
-      message: "Application created successfully!",
+      message: "Application submitted successfully!",
     });
   } catch (ex) {
     return res.status(500).json({ status: false, message: ex.message });
@@ -93,10 +93,9 @@ module.exports.getAllApplications = async (req, res, next) => {
 
 module.exports.getMyApplications = async (req, res, next) => {
   try {
-    const applications = await JobApplication.find({ user: req.user }).populate(
-      "job",
-      "isAccomodated announcementName salary rent"
-    );
+    const applications = await JobApplication.find({
+      user: req.user?._id,
+    }).populate("job", "isAccomodated announcementName salary rent");
 
     if (applications.length === 0) {
       return res

@@ -15,6 +15,7 @@ router.post(
 router.put(
   "/api/editEventApplication/:applicationId",
   authorizeAdmin,
+  isAuthenticatedUser,
   EventApplicationController.editEventApplication
 );
 
@@ -22,6 +23,7 @@ router.put(
 router.delete(
   "/api/deleteEventApplication/:applicationId",
   authorizeAdmin,
+  isAuthenticatedUser,
   EventApplicationController.deleteEventApplication
 );
 
@@ -29,12 +31,14 @@ router.delete(
 router.get(
   "/api/getAllApplications",
   authorizeAdmin,
+  isAuthenticatedUser,
   EventApplicationController.getAllApplications
 );
 
 // Get Single Application (Admin)
 router.get(
   "/api/getSingleApplication/:applicationId",
+  authorizeAdmin,
   isAuthenticatedUser,
   EventApplicationController.getSingleApplication
 );

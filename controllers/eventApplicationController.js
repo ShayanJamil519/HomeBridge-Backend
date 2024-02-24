@@ -8,6 +8,9 @@ module.exports.createEventApplication = async (req, res, next) => {
     const { name, phoneNumber, email, message } = req.body;
     const { eventId } = req.params;
 
+    console.log("req.user._id");
+    console.log(req.user._id);
+
     // Check if the event exists
     const event = await EventModel.findById(eventId);
     if (!event) {
@@ -19,7 +22,7 @@ module.exports.createEventApplication = async (req, res, next) => {
 
     // Check if the user has already applied to this event
     const existingApplication = await EventApplicationModel.findOne({
-      user: req.user._id,
+      user: req?.user._id,
       event: eventId,
     });
 
@@ -160,7 +163,7 @@ module.exports.getSingleApplication = async (req, res, next) => {
 module.exports.getAllMyApplications = async (req, res, next) => {
   try {
     const myApplications = await EventApplicationModel.find({
-      user: req.user,
+      user: req?.user?._id,
     }).populate("event");
 
     if (myApplications.length === 0) {
