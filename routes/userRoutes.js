@@ -8,6 +8,7 @@ const {
   deleteUser,
   forgotPassword,
   resetPassword,
+  confirmEmail,
 } = require("../controllers/userController");
 const {
   isAuthenticatedUser,
@@ -23,6 +24,7 @@ router.post("/api/user/adminLogin", adminLogin);
 router.get("/api/user/allUsers", authorizeAdmin, getAllUsers);
 router.get("/api/user", isAuthenticatedUser, getSingleUser);
 router.put("/api/user/updateUser", authorizeAdmin, updateUser);
+router.put("/api/user/confirmEmail", confirmEmail);
 router.delete("/api/user/deleteUser", authorizeAdmin, deleteUser);
 
 router.post("/api/user/forgotPassword", forgotPassword);
