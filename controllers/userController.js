@@ -4,6 +4,7 @@ const { generateToken } = require("../utils/generateToken");
 const userModel = require("../models/userModel");
 const crypto = require("crypto");
 const { createTransport } = require("nodemailer");
+const jwt = require("jsonwebtoken");
 
 module.exports.register = async (req, res, next) => {
   try {
@@ -24,13 +25,121 @@ module.exports.register = async (req, res, next) => {
 
     let hashedPassword = await bcrypt.hash(password, 10);
 
-    await userModel.create({
+    const confirmationToken = jwt.sign({ email }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    const newUser = await userModel.create({
       userName,
       email,
       password: hashedPassword,
     });
 
-    return res.json({ status: true, message: "Registeration Successfull" });
+    try {
+      // Send a password reset email
+      let transporter = createTransport({
+        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.NODEMAILER_EMAIL,
+          pass: process.env.NODEMAILER_PASSWORD,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      });
+
+      let mailOptions = {
+        to: newUser.email,
+        from: process.env.NODEMAILER_EMAIL,
+        subject: "Welcome to Our Platform! Confirm Your Email",
+        text: `Thank you for signing up with our platform!\n
+            To complete the registration process, please click on the following link or paste it into your browser:\n
+            ${process.env.FRONTEND_URL}/auth/confirm-email/${confirmationToken}\n
+            If you have not signed up for our platform, you can ignore this email.\n
+            We're excited to have you on board!\n`,
+      };
+
+      console.log("transporter: ", transporter);
+      await transporter.sendMail(mailOptions);
+      return res.json({
+        status: true,
+        message: "A confirmation email has been sent to your email address.",
+      });
+    } catch (error) {
+      return res.json({
+        status: false,
+        message: error.message,
+      });
+    }
+  } catch (ex) {
+    return res.json({ status: false, message: ex.message });
+  }
+};
+
+module.exports.confirmEmail = async (req, res) => {
+  try {
+    const { token } = req.query;
+
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const email = decoded.email;
+
+    // Update the user's emailConfirmed status
+    const user = await userModel.findOneAndUpdate(
+      { email },
+      { emailConfirmed: true },
+      { new: true }
+    );
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: false, message: "User not found." });
+    }
+
+    // Redirect the user or send a success response
+    res.json({ status: true, message: "Email confirmed successfully!" });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ status: false, message: "Invalid or expired token." });
+  }
+};
+
+module.exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({
+        status: false,
+        message: "User with this email doesn't exist ",
+      });
+    }
+
+    let isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.json({
+        message: "Incorrect password",
+        status: false,
+      });
+    }
+
+    return res.json({
+      status: true,
+      message: "Login Successfull",
+      user: {
+        userId: user._id,
+        userName: user.userName,
+        token: `Bearer ${generateToken(user._id.toString())}`,
+      },
+    });
   } catch (ex) {
     return res.json({ status: false, message: ex.message });
   }
@@ -246,7 +355,7 @@ module.exports.forgotPassword = async (req, res, next) => {
 
       let mailOptions = {
         to: userExists.email,
-        from: "muhammadabdullahimdad@gmail.com",
+        from: process.env.NODEMAILER_EMAIL,
         subject: "Password Reset",
         text: `You are receiving this because you have requested the reset of the password for your account.\n
         Please click on the following link, or paste this into your browser to complete the process:\n
