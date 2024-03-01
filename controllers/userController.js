@@ -300,6 +300,14 @@ module.exports.forgotPassword = async (req, res, next) => {
         .json({ status: false, message: "Invalid user name or email" });
     }
 
+    if (!user.emailConfirmed) {
+      return res.json({
+        status: false,
+        message:
+          "This email is not verified. Confirmation mail is already sent",
+      });
+    }
+
     const resetToken = crypto.randomBytes(20).toString("hex");
     const resetExpires = new Date(Date.now() + 3600000); // 1 hour from now
 
