@@ -19,7 +19,7 @@ app.get("/", async (req, res) => {
   res.json({ message: "server running!!!" });
 });
 
-// // Routes Imports
+// Routes Imports
 const counterRoutes = require("./routes/countersRoute");
 const userRoute = require("./routes/userRoutes");
 const eventRoute = require("./routes/eventRoutes");
