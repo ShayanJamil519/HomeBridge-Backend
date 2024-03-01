@@ -307,7 +307,7 @@ module.exports.forgotPassword = async (req, res, next) => {
         .json({ status: false, message: "Invalid user name or email" });
     }
 
-    if (!user.emailConfirmed) {
+    if (!userExists.emailConfirmed) {
       return res.json({
         status: false,
         message:
