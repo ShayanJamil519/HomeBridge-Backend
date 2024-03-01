@@ -180,6 +180,13 @@ module.exports.adminLogin = async (req, res, next) => {
         status: false,
       });
     }
+    if (!user.emailConfirmed) {
+      return res.json({
+        status: false,
+        message:
+          "This email is not verified. Confirmation mail is already sent",
+      });
+    }
 
     return res.json({
       status: true,
