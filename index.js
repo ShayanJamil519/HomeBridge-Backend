@@ -9,7 +9,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://home-bridge-website.vercel.app",
+    credentials: true,
   })
 );
 app.use(bodyParser.json({ limit: "10mb" }));
